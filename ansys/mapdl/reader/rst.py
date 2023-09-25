@@ -1322,20 +1322,26 @@ class Result(AnsysBinary):
             # read second buffer containing the node indices of the
             # results and convert from fortran to zero indexing
             sidx = self.read_record(ptr + ptr_rst + bufsz) - 1
-            unsort_nnum = self._resultheader['neqv'][sidx]
+            unsort_nnum = self._resultheader["neqv"][sidx]
 
             # now, sort using the new sorted node numbers indices
             new_sidx = np.argsort(unsort_nnum)
             nnum = unsort_nnum[new_sidx]
             result = result[new_sidx]
+
+            # Convert result to the global coordinate system
+            if not in_nodal_coord_sys:
+                euler_angles = self._mesh.node_angles[new_sidx].T
+                rotate_to_global(result, euler_angles)
+
         else:
             nnum = self._neqv[self._sidx]
             result = result.take(self._sidx, 0)
 
-        # Convert result to the global coordinate system
-        if not in_nodal_coord_sys:
-            euler_angles = self._mesh.node_angles[self._insolution].T
-            rotate_to_global(result, euler_angles)
+            # Convert result to the global coordinate system
+            if not in_nodal_coord_sys:
+                euler_angles = self._mesh.node_angles[self._insolution].T
+                rotate_to_global(result, euler_angles)
 
         # check for invalid values (mapdl writes invalid values as 2*100)
         result[result == 2**100] = 0
