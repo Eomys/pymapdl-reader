@@ -11,27 +11,6 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 
 
-def check_cython():
-    """Check if binaries exist and if not check if Cython is installed"""
-    has_binary_reader = False
-    for filename in os.listdir("ansys/mapdl/reader"):
-        if "_binary_reader" in filename:
-            has_binary_reader = True
-
-    if not has_binary_reader:
-        # ensure cython is installed before trying to build
-        try:
-            import cython
-        except ImportError:
-            raise ImportError(
-                "\n\n\nTo build pyansys please install Cython with:\n\n"
-                "pip install cython\n\n"
-            ) from None
-
-
-check_cython()
-
-
 class build_ext(_build_ext):
     """build class that includes numpy directory"""
 
