@@ -13,7 +13,9 @@ from setuptools.command.build_ext import build_ext as _build_ext
 try:
     import numpy as np
 except ImportError:
-    raise Exception('Please install numpy first with "pip install numpy"')
+    import pip
+
+    pip.main(["install", "numpy>=1.14.0"])
 
 
 class build_ext(_build_ext):
