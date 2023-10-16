@@ -10,19 +10,6 @@ from io import open as io_open
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 
-try:
-    import numpy as np
-except ImportError:
-    raise Exception('Please install numpy first with "pip install numpy"')
-
-
-# Facilities to install properly on Mac using clang
-def is_clang(bin):
-    proc = subprocess.Popen([bin, "-v"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    output = str(b"\n".join([stdout, stderr]).decode("ascii", "ignore"))
-    return not re.search(r"clang", output) is None
-
 
 def check_cython():
     """Check if binaries exist and if not check if Cython is installed"""
