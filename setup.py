@@ -16,35 +16,6 @@ except ImportError:
     raise Exception('Please install numpy first with "pip install numpy"')
 
 
-# Facilities to install properly on Mac using clang
-def is_clang(bin):
-    proc = subprocess.Popen([bin, "-v"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    output = str(b"\n".join([stdout, stderr]).decode("ascii", "ignore"))
-    return not re.search(r"clang", output) is None
-
-
-def check_cython():
-    """Check if binaries exist and if not check if Cython is installed"""
-    has_binary_reader = False
-    for filename in os.listdir("ansys/mapdl/reader"):
-        if "_binary_reader" in filename:
-            has_binary_reader = True
-
-    if not has_binary_reader:
-        # ensure cython is installed before trying to build
-        try:
-            import cython
-        except ImportError:
-            raise ImportError(
-                "\n\n\nTo build pyansys please install Cython with:\n\n"
-                "pip install cython\n\n"
-            ) from None
-
-
-check_cython()
-
-
 class build_ext(_build_ext):
     """build class that includes numpy directory"""
 
