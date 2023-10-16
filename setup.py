@@ -13,9 +13,7 @@ from setuptools.command.build_ext import build_ext as _build_ext
 try:
     import numpy as np
 except ImportError:
-    import pip
-
-    pip.main(["install", "numpy>=1.14.0"])
+    raise Exception('Please install numpy first with "pip install numpy"')
 
 
 def check_cython():
