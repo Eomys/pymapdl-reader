@@ -15,7 +15,7 @@ try:
 except ImportError:
     import pip
 
-    pip.main(["install", "numpy>=1.21.4"])
+    pip.main(["install", "numpy==1.21.4"])
 
 
 class build_ext(_build_ext):
