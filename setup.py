@@ -16,6 +16,11 @@ class build_ext(_build_ext):
 
     def finalize_options(self):
         _build_ext.finalize_options(self)
+        # Prevent numpy from thinking it is still in its setup process:
+        __builtins__.__NUMPY_SETUP__ = False
+        import numpy
+
+        self.include_dirs.append(numpy.get_include())
 
     def build_extensions(self):
         if os.name != "nt":
@@ -172,7 +177,7 @@ setup(
             language="c++",
         ),
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.6.*",
     keywords="vtk MAPDL ANSYS cdb full rst",
     package_data={
         "ansys.mapdl.reader.examples": [
