@@ -16,10 +16,6 @@ class build_ext(_build_ext):
 
     def finalize_options(self):
         _build_ext.finalize_options(self)
-        # Prevent numpy from thinking it is still in its setup process:
-        import numpy
-
-        self.include_dirs.append(numpy.get_include())
 
     def build_extensions(self):
         if os.name != "nt":
