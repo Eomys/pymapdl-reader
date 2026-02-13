@@ -284,13 +284,13 @@ class FullFile(AnsysBinary):
         if np.any(const < 0):
             if kdata is not None:
                 remove = np.nonzero(const < 0)[0]
-                mask = ~np.logical_or(np.in1d(krow, remove), np.in1d(kcol, remove))
+                mask = ~np.logical_or(np.isin(krow, remove), np.isin(kcol, remove))
                 krow = krow[mask]
                 kcol = kcol[mask]
                 kdata = kdata[mask]
 
             if mdata is not None:
-                mask = ~np.logical_or(np.in1d(mrow, remove), np.in1d(mcol, remove))
+                mask = ~np.logical_or(np.isin(mrow, remove), np.isin(mcol, remove))
                 mrow = mrow[mask]
                 mcol = mcol[mask]
                 mdata = mdata[mask]

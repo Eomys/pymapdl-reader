@@ -352,7 +352,7 @@ def save_as_archive(filename, grid, mtype_start=1, etype_start=1,
                           # VTK_QUADRATIC_QUAD
 
     # extract allowable cell types
-    mask = np.in1d(grid.celltypes, allowable)
+    mask = np.isin(grid.celltypes, allowable)
     grid = grid.extract_cells(mask)
 
     header = '/PREP7\n'

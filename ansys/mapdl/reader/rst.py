@@ -630,7 +630,7 @@ class Result(AnsysBinary):
         if nnum.size != npoints:
             new_scalars = np.zeros(npoints)
             nnum_grid = self.grid.point_arrays['ansys_node_num']
-            new_scalars[np.in1d(nnum_grid, nnum, assume_unique=True)] = scalars
+            new_scalars[np.isin(nnum_grid, nnum, assume_unique=True)] = scalars
             scalars = new_scalars
 
         ind = None
@@ -1355,7 +1355,7 @@ class Result(AnsysBinary):
                 mask = self.grid.point_arrays[nodes].view(bool)
             elif isinstance(nodes, Sequence):
                 if isinstance(nodes[0], int):
-                    mask = np.in1d(self.mesh.nnum, nodes)
+                    mask = np.isin(self.mesh.nnum, nodes)
                 elif isinstance(nodes[0], str):
                     mask = np.zeros(self.grid.n_points, bool)
                     for node_component in nodes:
@@ -1370,7 +1370,7 @@ class Result(AnsysBinary):
                                 'str or int')
 
             # mask is for global nodes, need for potentially subselectd nodes
-            submask = np.in1d(nnum, self.grid.point_arrays['ansys_node_num'][mask])
+            submask = np.isin(nnum, self.grid.point_arrays['ansys_node_num'][mask])
             nnum, result = nnum[submask], result[submask]
 
         return nnum, result
@@ -1550,7 +1550,7 @@ class Result(AnsysBinary):
         self.grid = self.quadgrid.linear_copy()
 
         # identify nodes that are actually in the solution
-        self._insolution = np.in1d(self._mesh.nnum, self._resultheader['neqv'],
+        self._insolution = np.isin(self._mesh.nnum, self._resultheader['neqv'],
                                    assume_unique=True)
 
     def solution_info(self, rnum):
@@ -3378,7 +3378,7 @@ class Result(AnsysBinary):
 
         if nnum_of_interest is not None:
             nnum_sel = np.unique(nnum_of_interest)
-            mask = np.in1d(self.mesh.nnum, nnum_sel)
+            mask = np.isin(self.mesh.nnum, nnum_sel)
 
             # extract any elements containing these values
             # note that we need this for accurate averaging of results
@@ -3387,11 +3387,11 @@ class Result(AnsysBinary):
                                             include_cells=True)
 
             # mask relative to global eeqv array
-            ele_mask = np.in1d(self._eeqv, grid['ansys_elem_num'],
+            ele_mask = np.isin(self._eeqv, grid['ansys_elem_num'],
                                assume_unique=True)
 
             # verify that all nodes of interest actually occur within
-            node_mask = np.in1d(nnum_sel, grid['ansys_node_num'],
+            node_mask = np.isin(nnum_sel, grid['ansys_node_num'],
                                 assume_unique=True)
             if not node_mask.all():
                 warnings.warn('Not all nodes IDs in the ``nnum_of_interest`` '
@@ -3444,7 +3444,7 @@ class Result(AnsysBinary):
 
         if nnum_of_interest is not None:
             if grid.n_points != nnum_sel.size:
-                mask = np.in1d(grid['ansys_node_num'], nnum_sel)
+                mask = np.isin(grid['ansys_node_num'], nnum_sel)
                 nnum = grid['ansys_node_num'][mask]
                 ncount = ncount[mask]
                 data = data[mask]
@@ -3880,7 +3880,7 @@ class Result(AnsysBinary):
 
         # angles relative to the XZ plane
         if nnum.size != self._mesh.nodes.shape[0]:
-            mask = np.in1d(nnum, self._mesh.nnum)
+            mask = np.isin(nnum, self._mesh.nnum)
             angle = np.arctan2(self._mesh.nodes[mask, 1],
                                self._mesh.nodes[mask, 0])
         else:

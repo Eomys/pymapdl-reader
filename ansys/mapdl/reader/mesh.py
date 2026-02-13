@@ -167,12 +167,12 @@ class Mesh():
         # add components
         # Add element components to unstructured grid
         for key, item in self.element_components.items():
-            mask = np.in1d(self.enum, item, assume_unique=True)
+            mask = np.isin(self.enum, item, assume_unique=True)
             grid.cell_arrays[key] = mask
 
         # Add node components to unstructured grid
         for key, item in self.node_components.items():
-            mask = np.in1d(nnum, item, assume_unique=True)
+            mask = np.isin(nnum, item, assume_unique=True)
             grid.point_arrays[key] = mask
 
         # store node angles
